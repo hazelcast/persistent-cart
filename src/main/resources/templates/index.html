@@ -44,7 +44,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="row : ${cart}">
+    <tr th:each="row : ${@cartService.rows(user)}">
         <td th:utext="${row.product.name}">Hazelcast token</td>
         <td th:utext="${row.quantity}">3</td>
         <td>
