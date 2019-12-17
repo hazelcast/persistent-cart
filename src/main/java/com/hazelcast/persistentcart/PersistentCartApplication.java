@@ -2,6 +2,7 @@ package com.hazelcast.persistentcart;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.persistentcart.authentication.AuthenticationFilter;
+import com.hazelcast.persistentcart.shop.CartRemovalListener;
 import com.hazelcast.persistentcart.shop.CartService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,6 +24,11 @@ public class PersistentCartApplication {
     @Bean
     public CartService cartService(HazelcastInstance hazelcast) {
         return new CartService(hazelcast);
+    }
+
+    @Bean
+    public CartRemovalListener cartRemovalListener(HazelcastInstance hazelcast) {
+        return new CartRemovalListener(hazelcast);
     }
 
     public static void main(String[] args) {
