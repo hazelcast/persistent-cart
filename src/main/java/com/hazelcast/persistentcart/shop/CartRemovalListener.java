@@ -13,9 +13,11 @@ import java.util.Optional;
 public class CartRemovalListener implements HttpSessionListener {
 
     private final HazelcastInstance hazelcast;
+    private final CartRowRepository repository;
 
-    public CartRemovalListener(HazelcastInstance hazelcast) {
+    public CartRemovalListener(HazelcastInstance hazelcast, CartRowRepository repository) {
         this.hazelcast = hazelcast;
+        this.repository = repository;
     }
 
     @Override
@@ -24,6 +26,9 @@ public class CartRemovalListener implements HttpSessionListener {
         Optional<User> user = Optional.ofNullable((User) session.getAttribute("user"));
         user.ifPresent(it -> {
             IMap<Long, List<CartRow>> cart = hazelcast.getMap("default");
+            List<CartRow> rows = cart.get(it.getId());
+            rows.forEach(row -> row.setUser(it));
+            repository.saveAll(rows);
             cart.remove(it.getId());
         });
     }

@@ -1,13 +1,28 @@
 package com.hazelcast.persistentcart.shop;
 
+import com.hazelcast.persistentcart.authentication.User;
 import org.springframework.util.Assert;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
 
+@Entity
 public class CartRow implements Serializable {
 
-    private final Product product;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @ManyToOne
+    private Product product;
+
+    @ManyToOne
+    private User user;
+
     private int quantity;
 
     public CartRow(Product product, int quantity) {
@@ -18,6 +33,12 @@ public class CartRow implements Serializable {
 
     public CartRow(Product product) {
         this(product, 0);
+    }
+
+    /**
+     * To please JPA.
+     */
+    public CartRow() {
     }
 
     @Override
@@ -43,5 +64,9 @@ public class CartRow implements Serializable {
 
     public void increaseQuantity(int quantity) {
         this.quantity += quantity;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
