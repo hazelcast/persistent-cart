@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Hazelcast's online shop</title>
+</head>
+<body>
+<h1>Welcome to Hazelcast's online shop</h1>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout">
+</form>
+<h2>Products</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr th:each="product : ${products}">
+            <td th:utext="${product.name}">Hazelcast token</td>
+            <td th:utext="${product.description}">A beautiful Hazelcast token</td>
+            <td>$<span th:utext="${product.price}">1</span></td>
+            <td>
+                <form th:action="@{/add}" method="post">
+                    <input type="number" value="1" name="quantity">
+                    <input type="hidden" th:value="${product.id}" name="id">
+                    <input type="submit" value="Add to cart">
+                </form>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<h2>Cart</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="row : ${cart}">
+        <td th:utext="${row.product.name}">Hazelcast token</td>
+        <td th:utext="${row.quantity}">3</td>
+        <td>
+            <form th:action="@{/remove}" method="post">
+                <input type="hidden" th:value="${row.product.id}" name="id">
+                <input type="submit" value="Remove from cart">
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
